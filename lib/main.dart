@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 
-void main() => runApp(MyApp());
+List<CameraDescription> cameras;
+
+Future<void> main() async {
+  cameras = await availableCameras();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -51,7 +58,7 @@ class CameraWidget extends StatelessWidget {
       width: 256.0,
       height: 256.0,
       child: Center(
-        child: Text("Camera"),
+        child: CameraApp(),
       ),
     );
   }
@@ -70,12 +77,7 @@ class ActionButton extends StatelessWidget {
       width: 100.0,
       height: 50.0,
       child: Center(
-        child: FlatButton(
-          onPressed: (){
-            
-          },
-          child: Text(buttonText)
-        ),
+        child: FlatButton(onPressed: () {}, child: Text(buttonText)),
       ),
     );
   }
@@ -102,5 +104,42 @@ class ActionBar extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CameraApp extends StatefulWidget {
+  @override
+  _CameraAppState createState() => _CameraAppState();
+}
+
+class _CameraAppState extends State<CameraApp> {
+  CameraController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CameraController(cameras[0], ResolutionPreset.medium);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!controller.value.isInitialized) {
+      return Container();
+    }
+    return AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: CameraPreview(controller));
   }
 }
