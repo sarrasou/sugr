@@ -34,11 +34,11 @@ class MyApp extends StatelessWidget {
                   child: CameraWidget(),
                 ),
               ),
-              Expanded(
-                child: Center(
+              
+                Center(
                   child: ActionBar(),
                 ),
-              ),
+             
             ],
           ),
         ),
@@ -60,8 +60,8 @@ class CameraWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(10.0),
       color: Colors.blue[300],
-      width: 256.0,
-      height: 256.0,
+      height: 400.0,
+      width: 265.0,
       child: Center(
         child: CameraApp(),
       ),
@@ -158,7 +158,7 @@ class _CameraAppState extends State<CameraApp> {
       return Container();
     }
     return AspectRatio(
-        aspectRatio: controller.value.aspectRatio,
-        child: CameraPreview(controller));
+      aspectRatio: controller.value.aspectRatio,
+      child: CameraPreview(controller));
   }
 }
