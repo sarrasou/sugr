@@ -39,9 +39,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void _saved() {
-
-  }
+  void _saved() {}
 }
 
 class CameraWidget extends StatelessWidget {
@@ -61,7 +59,7 @@ class CameraWidget extends StatelessWidget {
 
 class ActionButton extends StatelessWidget {
   final String buttonText;
-  
+
   const ActionButton(this.buttonText);
 
   @override
@@ -87,7 +85,7 @@ class ActionBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: ActionButton("Scan"), 
+              child: ActionButton("Scan"),
             ),
             Expanded(
               child: ActionButton("Camera"),
