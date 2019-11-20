@@ -23,7 +23,14 @@ class MyApp extends StatelessWidget {
           title: Text("sugr"),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.account_circle), onPressed: _userInfo),
+            IconButton(
+                icon: Icon(Icons.account_circle),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SecondRoute()),
+                  );
+                }),
           ],
         ),
         body: Center(
@@ -45,12 +52,24 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
 
-  void _userInfo() {
-    //  showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) => _buildDialog(context)
-    // );
+class SecondRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Route"),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
   }
 }
 
