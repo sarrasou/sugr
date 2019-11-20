@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Sugr"),
+          title: Text("sugr"),
           centerTitle: true,
           actions: <Widget>[
             IconButton(icon: Icon(Icons.list), onPressed: _saved),
@@ -70,7 +70,12 @@ class ActionButton extends StatelessWidget {
       width: 100.0,
       height: 50.0,
       child: Center(
-        child: Text(buttonText),
+        child: FlatButton(
+          onPressed: (){
+            
+          },
+          child: Text(buttonText)
+        ),
       ),
     );
   }
