@@ -1,105 +1,103 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
-// import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Food Search';
     return MaterialApp(
-      title: appTitle,
+      title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: Colors.white,
+        primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text(appTitle),
+          title: Text("Sugr"),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.list), onPressed: _saved),
+          ],
         ),
-          body: Column (children: <Widget>[
-            FoodForm(),
-            Text('Hello World.'),
-          ],)
-          )
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Center(
+                  child: CameraWidget(),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: ActionBar(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
-}
 
-class FoodForm extends StatefulWidget {
-  @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
+  void _saved() {
+
   }
 }
 
-// Create a corresponding State class.
-// This class holds data related to the form.
-class MyCustomFormState extends State<FoodForm> {
-  final _formKey = GlobalKey<FormState>();
-
+class CameraWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
-                }
-              },
-              child: Text('Submit'),
-            ),
-          ),
-        ],
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      color: Colors.blue[300],
+      width: 256.0,
+      height: 256.0,
+      child: Center(
+        child: Text("Camera"),
       ),
     );
   }
 }
 
-String _textString = 'Hello world';
+class ActionButton extends StatelessWidget {
+  final String buttonText;
+  
+  const ActionButton(this.buttonText);
 
-      @override
-      Widget build(BuildContext context) {
-        return Column(
-          children: [
-            Text(
-              _textString,
-              style: TextStyle(fontSize: 30),
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      color: Colors.blue[300],
+      width: 100.0,
+      height: 50.0,
+      child: Center(
+        child: Text(buttonText),
+      ),
+    );
+  }
+}
+
+class ActionBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: ActionButton("Scan"), 
             ),
-            TextField( //                       <--- TextField
-              onChanged: (text) {
-                // _doSomething(text);
-              },
-            )
+            Expanded(
+              child: ActionButton("Camera"),
+            ),
+            Expanded(
+              child: ActionButton("Search"),
+            ),
           ],
-        );
-      }
-
-      // void _doSomething(String text) {
-      //   setState(() {
-      //     _textString = text;
-      //   });
-      // }
-
+        ),
+      ),
+    );
+  }
+}
