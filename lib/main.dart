@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           title: Text("sugr"),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.list), onPressed: _saved),
+            IconButton(icon: Icon(Icons.account_circle), onPressed: _userInfo),
           ],
         ),
         body: Center(
@@ -39,7 +39,12 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void _saved() {}
+  void _userInfo() {
+    //  showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) => _buildDialog(context)
+    // );
+  }
 }
 
 class CameraWidget extends StatelessWidget {
@@ -59,8 +64,9 @@ class CameraWidget extends StatelessWidget {
 
 class ActionButton extends StatelessWidget {
   final String buttonText;
+  final String popupDesc;
 
-  const ActionButton(this.buttonText);
+  const ActionButton(this.buttonText, this.popupDesc);
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +77,20 @@ class ActionButton extends StatelessWidget {
       height: 50.0,
       child: Center(
         child: FlatButton(
-          onPressed: (){
-            
-          },
-          child: Text(buttonText)
-        ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _buildDialog(context),
+              );
+            },
+            child: Text(buttonText)),
       ),
+    );
+  }
+
+  Widget _buildDialog(BuildContext context) {
+    return new AlertDialog(
+      title: Text(popupDesc),
     );
   }
 }
@@ -90,13 +104,13 @@ class ActionBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: ActionButton("Scan"),
+              child: ActionButton("Scan", "scan desc"),
             ),
             Expanded(
-              child: ActionButton("Camera"),
+              child: ActionButton("Camera", "cam desc"),
             ),
             Expanded(
-              child: ActionButton("Search"),
+              child: ActionButton("Search", "search desc"),
             ),
           ],
         ),
