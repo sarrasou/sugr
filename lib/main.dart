@@ -105,13 +105,13 @@ class ActionButton extends StatelessWidget {
       height: 50.0,
       child: Center(
         child: FlatButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => _buildDialog(context),
-              );
-            },
-            child: Image(image: AssetImage(iconPath)),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => _buildDialog(context),
+            );
+          },
+          child: Image(image: AssetImage(iconPath)),
         ),
       ),
     );
@@ -133,13 +133,16 @@ class ActionBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: ActionButton("icons/baseline_scanner_white_18dp.png", "Scan desc"),
+              child: ActionButton(
+                  "icons/baseline_scanner_white_18dp.png", "Scan desc"),
             ),
             Expanded(
-              child: ActionButton("icons/baseline_photo_camera_white_18dp.png", "Camera desc"),
+              child: ActionButton(
+                  "icons/baseline_photo_camera_white_18dp.png", "Camera desc"),
             ),
             Expanded(
-              child: ActionButton("icons/baseline_search_white_18dp.png", "Search desc"),
+              child: ActionButton(
+                  "icons/baseline_search_white_18dp.png", "Search desc"),
             ),
           ],
         ),
