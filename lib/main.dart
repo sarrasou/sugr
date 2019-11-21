@@ -56,30 +56,6 @@ class Home extends StatelessWidget {
   }
 }
 
-class Saved extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("User Information"),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-        ],
-      ),
-      body: Center(
-        child: TextFormField(
-          decoration: InputDecoration(labelText: 'Enter carb ratio (form: U/'),
-        ),
-      ),
-    );
-  }
-}
-
 class CameraWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -190,5 +166,69 @@ class _CameraAppState extends State<CameraApp> {
     return AspectRatio(
         aspectRatio: controller.value.aspectRatio,
         child: CameraPreview(controller));
+  }
+}
+
+class Saved extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("User Information"),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ],
+      ),
+      body: InputWidget(),
+    );
+  }
+}
+
+class InputWidget extends StatefulWidget {
+  InputWidget({Key key}) : super(key: key);
+
+  @override
+  _InputWidgetState createState() => _InputWidgetState();
+}
+
+class _InputWidgetState extends State<InputWidget> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: RaisedButton(
+              onPressed: () {
+                // Validate will return true if the form is valid, or false if
+                // the form is invalid.
+                if (_formKey.currentState.validate()) {
+                  // Process data.
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
