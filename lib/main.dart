@@ -6,10 +6,17 @@ List<CameraDescription> cameras;
 
 Future<void> main() async {
   cameras = await availableCameras();
-  runApp(MyApp());
+  runApp(MaterialApp(
+    title: 'Sugr',
+    initialRoute: '/',
+    routes: {
+      '/': (context) => Home(),
+      '/saved': (context) => Saved(),
+    },
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class Home extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -26,10 +33,7 @@ class MyApp extends StatelessWidget {
             IconButton(
                 icon: Icon(Icons.account_circle),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SecondRoute()),
-                  );
+                  Navigator.pushNamed(context, '/saved');
                 }),
           ],
         ),
@@ -41,11 +45,9 @@ class MyApp extends StatelessWidget {
                   child: CameraWidget(),
                 ),
               ),
-              
-                Center(
-                  child: ActionBar(),
-                ),
-             
+              Center(
+                child: ActionBar(),
+              ),
             ],
           ),
         ),
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class SecondRoute extends StatelessWidget {
+class Saved extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +179,7 @@ class _CameraAppState extends State<CameraApp> {
       return Container();
     }
     return AspectRatio(
-      aspectRatio: controller.value.aspectRatio,
-      child: CameraPreview(controller));
+        aspectRatio: controller.value.aspectRatio,
+        child: CameraPreview(controller));
   }
 }
