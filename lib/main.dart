@@ -91,10 +91,10 @@ class CameraWidget extends StatelessWidget {
 }
 
 class ActionButton extends StatelessWidget {
-  final String buttonText;
+  final String iconPath;
   final String popupDesc;
 
-  const ActionButton(this.buttonText, this.popupDesc);
+  const ActionButton(this.iconPath, this.popupDesc);
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +111,8 @@ class ActionButton extends StatelessWidget {
                 builder: (BuildContext context) => _buildDialog(context),
               );
             },
-            child: Text(buttonText)),
+            child: Image(image: AssetImage(iconPath)),
+        ),
       ),
     );
   }
@@ -132,13 +133,13 @@ class ActionBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: ActionButton("Scan", "scan desc"),
+              child: ActionButton("icons/baseline_scanner_white_18dp.png", "Scan desc"),
             ),
             Expanded(
-              child: ActionButton("Camera", "cam desc"),
+              child: ActionButton("icons/baseline_photo_camera_white_18dp.png", "Camera desc"),
             ),
             Expanded(
-              child: ActionButton("Search", "search desc"),
+              child: ActionButton("icons/baseline_search_white_18dp.png", "Search desc"),
             ),
           ],
         ),
