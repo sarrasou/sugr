@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:http/http.dart';
 
 List<CameraDescription> cameras;
 
@@ -8,10 +9,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
   runApp(MaterialApp(
-    title: 'Sugr',
+    theme: ThemeData(
+    primarySwatch: Colors.blue,
+    ),
     initialRoute: '/',
     routes: {
       '/': (context) => Home(),
+      '/search': (context) => Search(),
       '/saved': (context) => Saved(),
     },
   ));
@@ -21,12 +25,7 @@ class Home extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text("sugr"),
           centerTitle: true,
@@ -52,7 +51,6 @@ class Home extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
@@ -88,10 +86,14 @@ class ActionButton extends StatelessWidget {
       child: Center(
         child: FlatButton(
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildDialog(context),
-            );
+            if (popupDesc == "search") {
+              Navigator.pushNamed(context, '/search');
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => _buildDialog(context),
+              );
+            }
           },
           child: Image(image: AssetImage(iconPath)),
         ),
@@ -124,7 +126,7 @@ class ActionBar extends StatelessWidget {
             ),
             Expanded(
               child: ActionButton(
-                  "icons/baseline_search_white_18dp.png", "Search desc"),
+                  "icons/baseline_search_white_18dp.png", "search"),
             ),
           ],
         ),
@@ -167,6 +169,26 @@ class _CameraAppState extends State<CameraApp> {
     return AspectRatio(
         aspectRatio: controller.value.aspectRatio,
         child: CameraPreview(controller));
+  }
+}
+
+class Search extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Search"),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ],
+      ),
+      body: InputWidget(),
+    );
   }
 }
 
@@ -222,7 +244,6 @@ class _InputWidgetState extends State<InputWidget> {
                 // Validate will return true if the form is valid, or false if
                 // the form is invalid.
                 if (_formKey.currentState.validate()) {
-                  // Process data.
                 }
               },
               child: Text('Submit'),
