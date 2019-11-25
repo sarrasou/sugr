@@ -97,15 +97,15 @@ class ActionBar extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: ActionButton(
-                  "icons/baseline_scanner_white_18dp.png", "Scan desc"),
+                  Icon(Icons.scanner, color: Colors.white), "Scan desc"),
             ),
             Expanded(
               child: ActionButton(
-                  "icons/baseline_photo_camera_white_18dp.png", "Camera desc"),
+                  Icon(Icons.photo_camera, color: Colors.white), "Camera desc"),
             ),
             Expanded(
               child: ActionButton(
-                  "icons/baseline_search_white_18dp.png", "search"),
+                  Icon(Icons.search, color: Colors.white), "search"),
             ),
           ],
         ),
@@ -115,10 +115,10 @@ class ActionBar extends StatelessWidget {
 }
 
 class ActionButton extends StatelessWidget {
-  final String iconPath;
+  final Icon icon;
   final String popupDesc;
 
-  const ActionButton(this.iconPath, this.popupDesc);
+  const ActionButton(this.icon, this.popupDesc);
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ class ActionButton extends StatelessWidget {
               );
             }
           },
-          child: Image(image: AssetImage(iconPath)),
+          child: icon,
         ),
       ),
     );
