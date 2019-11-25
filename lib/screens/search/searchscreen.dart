@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SearchWidget extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
   final searchController = TextEditingController();
+  Widget _foods = ListView(children: <Widget>[]);
 
   @override
   void dispose() {
@@ -28,10 +30,19 @@ class _SearchWidgetState extends State<SearchWidget> {
                 }),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            controller: searchController,
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  controller: searchController,
+                ),
+              ),
+              Expanded(
+                child: _foods,
+              ),
+            ],
           ),
         ),
         floatingActionButton: Builder(builder: (BuildContext context) {
@@ -46,25 +57,33 @@ class _SearchWidgetState extends State<SearchWidget> {
                 "x-app-key": "3ff9cb2d68cd00e7779deb4fa93fea07"
               };
 
-              Scaffold.of(context).showSnackBar(SnackBar(content: Text("Loading")));
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text("Loading")));
 
               var response = await http.get(url, headers: headers);
 
               Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(SnackBar(content: Text("Loaded"), duration: Duration(seconds: 1)));
+              Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Loaded"), duration: Duration(seconds: 1)));
 
-              return showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    // Retrieve the text the that user has entered by using the
-                    // TextEditingController.
-                    content: Text(response.body),
-                  );
-                },
-              );
+              Map<String, dynamic> body = jsonDecode(response.body);
+
+              var foods = List<Widget>();
+
+              for (int i = 0; i < body["common"].length; i++) {
+                Widget foodCard = Card(
+                  child: ListTile(
+                    title: Text(body["common"][i]["food_name"]),
+                  ),
+                );
+
+                foods.add(foodCard);
+              }
+
+              setState(() {
+                _foods = ListView(children: foods);
+              });
             },
-            tooltip: 'Show me the value!',
             child: Icon(Icons.search),
           );
         }));
