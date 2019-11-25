@@ -18,48 +18,55 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Search'),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: searchController,
+        appBar: AppBar(
+          title: Text('Search'),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        // When the user presses the button, show an alert dialog containing
-        // the text that the user has entered into the text field.
-        onPressed: () async {
-          var url =
-              "https://trackapi.nutritionix.com/v2/search/instant?query=${searchController.text}&detailed=true";
-          var headers = {
-            "x-app-id": "314dccf6",
-            "x-app-key": "3ff9cb2d68cd00e7779deb4fa93fea07"
-          };
-          var response = await http.get(url, headers: headers);
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: TextField(
+            controller: searchController,
+          ),
+        ),
+        floatingActionButton: Builder(builder: (BuildContext context) {
+          return FloatingActionButton(
+            // When the user presses the button, show an alert dialog containing
+            // the text that the user has entered into the text field.
+            onPressed: () async {
+              var url =
+                  "https://trackapi.nutritionix.com/v2/search/instant?query=${searchController.text}&detailed=true";
+              var headers = {
+                "x-app-id": "314dccf6",
+                "x-app-key": "3ff9cb2d68cd00e7779deb4fa93fea07"
+              };
 
-          return showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                // Retrieve the text the that user has entered by using the
-                // TextEditingController.
-                content: Text(response.body),
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text("Loading")));
+
+              var response = await http.get(url, headers: headers);
+
+              Scaffold.of(context).hideCurrentSnackBar();
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text("Loaded"), duration: Duration(seconds: 1)));
+
+              return showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    // Retrieve the text the that user has entered by using the
+                    // TextEditingController.
+                    content: Text(response.body),
+                  );
+                },
               );
             },
+            tooltip: 'Show me the value!',
+            child: Icon(Icons.search),
           );
-        },
-        tooltip: 'Show me the value!',
-        child: Icon(Icons.search),
-      ),
-    );
+        }));
   }
 }
