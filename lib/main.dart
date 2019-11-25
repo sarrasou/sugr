@@ -10,13 +10,13 @@ Future<void> main() async {
   cameras = await availableCameras();
   runApp(MaterialApp(
     theme: ThemeData(
-    primarySwatch: Colors.blue,
+      primarySwatch: Colors.blue,
     ),
     initialRoute: '/',
     routes: {
       '/': (context) => Home(),
-      '/search': (context) => Search(),
-      '/saved': (context) => Saved(),
+      '/search': (context) => SearchWidget(),
+      '/saved': (context) => SearchWidget(),
     },
   ));
 }
@@ -26,31 +26,31 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("sugr"),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.account_circle),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/saved');
-                }),
+      appBar: AppBar(
+        title: Text("sugr"),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.account_circle),
+              onPressed: () {
+                Navigator.pushNamed(context, '/saved');
+              }),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: CameraWidget(),
+              ),
+            ),
+            Center(
+              child: ActionBar(),
+            ),
           ],
         ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Center(
-                  child: CameraWidget(),
-                ),
-              ),
-              Center(
-                child: ActionBar(),
-              ),
-            ],
-          ),
-        ),
+      ),
     );
   }
 }
@@ -172,13 +172,25 @@ class _CameraAppState extends State<CameraApp> {
   }
 }
 
-class Search extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
+  @override
+  _SearchWidgetState createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  final searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search"),
-        centerTitle: true,
+        title: Text('Search'),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.arrow_back_ios),
@@ -187,69 +199,29 @@ class Search extends StatelessWidget {
               }),
         ],
       ),
-      body: InputWidget(),
-    );
-  }
-}
-
-class Saved extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("User Information"),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: TextField(
+          controller: searchController,
+        ),
       ),
-      body: InputWidget(),
-    );
-  }
-}
-
-class InputWidget extends StatefulWidget {
-  InputWidget({Key key}) : super(key: key);
-
-  @override
-  _InputWidgetState createState() => _InputWidgetState();
-}
-
-class _InputWidgetState extends State<InputWidget> {
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
+      floatingActionButton: FloatingActionButton(
+        // When the user presses the button, show an alert dialog containing
+        // the text that the user has entered into the text field.
+        onPressed: () {
+          return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                // Retrieve the text the that user has entered by using the
+                // TextEditingController.
+                content: Text(searchController.text),
+              );
             },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              onPressed: () {
-                // Validate will return true if the form is valid, or false if
-                // the form is invalid.
-                if (_formKey.currentState.validate()) {
-                }
-              },
-              child: Text('Submit'),
-            ),
-          ),
-        ],
+          );
+        },
+        tooltip: 'Show me the value!',
+        child: Icon(Icons.search),
       ),
     );
   }
