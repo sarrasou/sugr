@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:sugr/main.dart';
 
 class SearchWidget extends StatefulWidget {
   @override
@@ -82,7 +84,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
                 for (int j = 0; j < nutrients.length; j++) {
                   if (nutrients[j]["attr_id"] == 205) {
-                    foodInfo["carbs"] = nutrients[j]["value"].toString() + "g";
+                    foodInfo["carbs"] = nutrients[j]["value"].toString();
                   }
                 }
 
@@ -122,6 +124,7 @@ class FoodCard extends StatelessWidget {
                     Text("Serving Unit: " + this.foodInfo["serving_unit"]),
                     Text("Serving Quantity: " + this.foodInfo["serving_qty"]),
                     Text("Carbs: " + this.foodInfo["carbs"]),
+                    Text("Insulin:" + Provider.of<UserInfo>(context, listen: false).calculateInsulin(double.parse(this.foodInfo["carbs"])).toString()),
                   ],
                 ),
               );
