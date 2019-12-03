@@ -66,24 +66,26 @@ class _SearchWidgetState extends State<SearchWidget> {
               Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text("Loaded"), duration: Duration(seconds: 1)));
 
-              List<dynamic>  commonFoods = jsonDecode(response.body)["common"];
+              List<dynamic> commonFoods = jsonDecode(response.body)["common"];
 
               var foods = List<Widget>();
 
               for (int i = 0; i < commonFoods.length; i++) {
                 Map<String, String> foodInfo = {};
                 foodInfo["title"] = commonFoods[i]["food_name"];
-                foodInfo["serving_unit"] = commonFoods[i]["serving_unit"].toString();
-                foodInfo["serving_qty"] = commonFoods[i]["serving_qty"].toString();
+                foodInfo["serving_unit"] =
+                    commonFoods[i]["serving_unit"].toString();
+                foodInfo["serving_qty"] =
+                    commonFoods[i]["serving_qty"].toString();
 
                 var nutrients = commonFoods[i]["full_nutrients"];
-                
+
                 for (int j = 0; j < nutrients.length; j++) {
                   if (nutrients[j]["attr_id"] == 205) {
                     foodInfo["carbs"] = nutrients[j]["value"].toString() + "g";
                   }
                 }
-                 
+
                 Widget foodCard = FoodCard(foodInfo);
 
                 foods.add(foodCard);
@@ -107,27 +109,26 @@ class FoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        child: ListTile(
-          title: Text(this.foodInfo["title"]),
+      child: ListTile(
+        title: Text(this.foodInfo["title"]),
         onTap: () {
-
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(this.foodInfo["title"]),
-                    content: Column(
-                        children: <Widget>[
-                          Text("Serving Unit: " + this.foodInfo["serving_unit"]),
-                          Text("Serving Quantity: " + this.foodInfo["serving_qty"]),
-                          Text("Carbs: " + this.foodInfo["carbs"]),
-                        ], 
-                    ),
-                  );
-                }, 
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(this.foodInfo["title"]),
+                content: Column(
+                  children: <Widget>[
+                    Text("Serving Unit: " + this.foodInfo["serving_unit"]),
+                    Text("Serving Quantity: " + this.foodInfo["serving_qty"]),
+                    Text("Carbs: " + this.foodInfo["carbs"]),
+                  ],
+                ),
               );
+            },
+          );
         },
-        ),
+      ),
     );
   }
 }
