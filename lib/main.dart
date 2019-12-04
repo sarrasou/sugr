@@ -25,11 +25,15 @@ Future<void> main() async {
 }
 
 class UserInfo with ChangeNotifier {
-  int ratio = 1;
+  int ratio;
 
   double calculateInsulin(double carbs) {
     double insulin = carbs / ratio;
     return insulin;
+  }
+
+  int getRatio(){
+    return ratio;
   }
 
   void setRatio(int newRatio) {
