@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sugr/main.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -97,7 +98,7 @@ class ActionBar extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: ActionButton(
-                  Icon(Icons.scanner, color: Colors.white), "Scan desc"),
+                  Icon(Icons.scanner, color: Colors.white), "scan"),
             ),
             Expanded(
               child: ActionButton(
@@ -129,9 +130,12 @@ class ActionButton extends StatelessWidget {
       height: 50.0,
       child: Center(
         child: FlatButton(
-          onPressed: () {
+          onPressed: () async {
             if (popupDesc == "search") {
               Navigator.pushNamed(context, '/search');
+            } else if (popupDesc == "scan") {
+              print(await FlutterBarcodeScanner.scanBarcode(
+                  "#FF0000", "Cancel", false, ScanMode.BARCODE));
             } else {
               showDialog(
                 context: context,

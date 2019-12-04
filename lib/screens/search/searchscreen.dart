@@ -124,7 +124,11 @@ class FoodCard extends StatelessWidget {
                     Text("Serving Unit: " + this.foodInfo["serving_unit"]),
                     Text("Serving Quantity: " + this.foodInfo["serving_qty"]),
                     Text("Carbs: " + this.foodInfo["carbs"]),
-                    Text("Insulin:" + Provider.of<UserInfo>(context, listen: false).calculateInsulin(double.parse(this.foodInfo["carbs"])).toString()),
+                    Text("Insulin:" +
+                        Provider.of<UserInfo>(context, listen: false)
+                            .calculateInsulin(
+                                double.parse(this.foodInfo["carbs"]))
+                            .toString()),
                   ],
                 ),
               );
