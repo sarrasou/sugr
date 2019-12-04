@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:sugr/screens/search/searchscreen.dart';
 import 'package:sugr/screens/home/homescreen.dart';
 import 'package:provider/provider.dart';
+import 'package:sugr/screens/userInput/inputscreen.dart';
 
 List<CameraDescription> cameras;
 
@@ -19,7 +20,7 @@ Future<void> main() async {
         routes: {
           '/': (context) => Home(),
           '/search': (context) => SearchWidget(),
-          '/saved': (context) => SearchWidget(),
+          '/saved': (context) => UserInput(),
         },
       )));
 }
