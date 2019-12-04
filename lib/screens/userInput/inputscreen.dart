@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:sugr/main.dart';
 
-class SearchWidget extends StatefulWidget {
+class UserInput extends StatefulWidget {
   @override
-  _SearchWidgetState createState() => _SearchWidgetState();
+  _UserInputState createState() => _UserInputState();
 }
 
-class _SearchWidgetState extends State<SearchWidget> {
+class _UserInputState extends State<UserInput> {
   final searchController = TextEditingController();
   Widget _foods = ListView(children: <Widget>[]);
 
