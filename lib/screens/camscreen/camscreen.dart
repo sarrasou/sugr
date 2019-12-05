@@ -1,7 +1,9 @@
+import 'dart:async';
+import 'package:path/path.dart' show join;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:provider/provider.dart';
+import 'package:camera/camera.dart';
 import 'package:sugr/main.dart';
 
 class CamWidget extends StatefulWidget {
@@ -10,137 +12,73 @@ class CamWidget extends StatefulWidget {
 }
 
 class _CamWidgetState extends State<CamWidget> {
-  final searchController = TextEditingController();
-  Widget _foods = ListView(children: <Widget>[]);
+  CameraController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = CameraController(cameras[0], ResolutionPreset.medium);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
-    searchController.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!controller.value.isInitialized) {
+      return Container();
+    }
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Search'),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-          ],
-        ),
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: searchController,
-                ),
-              ),
-              Expanded(
-                child: _foods,
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: Builder(builder: (BuildContext context) {
-          return FloatingActionButton(
-            // When the user presses the button, show an alert dialog containing
-            // the text that the user has entered into the text field.
-            onPressed: () async {
-              var url =
-                  "https://trackapi.nutritionix.com/v2/search/instant?query=${searchController.text}&detailed=true";
-              var headers = {
-                "x-app-id": "314dccf6",
-                "x-app-key": "3ff9cb2d68cd00e7779deb4fa93fea07"
-              };
-
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text("Loading")));
-
-              var response = await http.get(url, headers: headers);
-
-              Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text("Loaded"), duration: Duration(seconds: 1)));
-
-              List<dynamic> commonFoods = jsonDecode(response.body)["common"];
-
-              var foods = List<Widget>();
-
-              for (int i = 0; i < commonFoods.length; i++) {
-                Map<String, String> foodInfo = {};
-                foodInfo["title"] = commonFoods[i]["food_name"];
-                foodInfo["serving_unit"] =
-                    commonFoods[i]["serving_unit"].toString();
-                foodInfo["serving_qty"] =
-                    commonFoods[i]["serving_qty"].toString();
-
-                var nutrients = commonFoods[i]["full_nutrients"];
-
-                for (int j = 0; j < nutrients.length; j++) {
-                  if (nutrients[j]["attr_id"] == 205) {
-                    foodInfo["carbs"] = nutrients[j]["value"].toString();
-                  }
-                }
-
-                Widget foodCard = FoodCard(foodInfo);
-
-                foods.add(foodCard);
-              }
-
-              setState(() {
-                _foods = ListView(children: foods);
-              });
-            },
-            child: Icon(Icons.search),
+      appBar: AppBar(
+        title: const Text('Sample Code'),
+      ),
+      body: AspectRatio(
+          aspectRatio: controller.value.aspectRatio,
+          child: CameraPreview(controller)),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.camera_alt),
+        onPressed: () async {
+          final path = join(
+            // Store the picture in the temp directory.
+            // Find the temp directory using the `path_provider` plugin.
+            (await getTemporaryDirectory()).path,
+            '${DateTime.now()}.png',
           );
-        }));
-  }
-}
-
-class FoodCard extends StatelessWidget {
-  final Map<String, String> foodInfo;
-
-  const FoodCard(this.foodInfo);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text(this.foodInfo["title"]),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(this.foodInfo["title"]),
-                content: Column(
-                  children: <Widget>[
-                    Text("Serving Unit: " + this.foodInfo["serving_unit"]),
-                    Text("Serving Quantity: " + this.foodInfo["serving_qty"]),
-                    Text("Carbs: " + this.foodInfo["carbs"]),
-                    Text("Insulin:" +
-                        Provider.of<UserInfo>(context, listen: false)
-                            .calculateInsulin(
-                                double.parse(this.foodInfo["carbs"]))
-                            .toString()),
-                    Text("Current ratio:" +
-                        "1/" +
-                        Provider.of<UserInfo>(context, listen: false)
-                            .getRatio()
-                            .toString())
-                  ],
-                ),
-              );
-            },
+          await controller.takePicture(path);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DisplayPictureScreen(imagePath: path),
+            ),
           );
         },
       ),
+    );
+  }
+}
+
+class DisplayPictureScreen extends StatelessWidget {
+  final String imagePath;
+
+  const DisplayPictureScreen({Key key, this.imagePath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Display the Picture')),
+      // The image is stored as a file on the device. Use the `Image.file`
+      // constructor with the given path to display the image.
+      body: Image.file(File(imagePath)),
     );
   }
 }
