@@ -4,6 +4,7 @@ import 'package:sugr/screens/search/searchscreen.dart';
 import 'package:sugr/screens/home/homescreen.dart';
 import 'package:provider/provider.dart';
 import 'package:sugr/screens/userInput/inputscreen.dart';
+import 'package:sugr/screens/camscreen/camscreen.dart';
 
 List<CameraDescription> cameras;
 
@@ -21,6 +22,7 @@ Future<void> main() async {
           '/': (context) => Home(),
           '/search': (context) => SearchWidget(),
           '/saved': (context) => UserInput(),
+          '/cam': (context) => CamWidget()
         },
       )));
 }

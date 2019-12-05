@@ -105,7 +105,7 @@ class ActionBar extends StatelessWidget {
             ),
             Expanded(
               child: ActionButton(
-                  Icon(Icons.photo_camera, color: Colors.white), "Camera desc"),
+                  Icon(Icons.photo_camera, color: Colors.white), "cam"),
             ),
             Expanded(
               child: ActionButton(
@@ -171,7 +171,9 @@ class ActionButton extends StatelessWidget {
                   );
                 },
               );
-            } else {
+            } else if (popupDesc == "cam") {
+              Navigator.pushNamed(context, '/cam');
+            }else {
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildDialog(context),
