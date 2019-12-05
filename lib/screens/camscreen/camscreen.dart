@@ -68,7 +68,19 @@ class _CamWidgetState extends State<CamWidget> {
           final picture = new File(path).readAsBytesSync();
 
           var response = await http.post(url, headers: headers, body: picture);
-          print(response.body);
+
+          List<dynamic> tags = jsonDecode(response.body)["tags"];
+          // var foods = List<Widget>();
+
+          // for(int i=0; i < tags.length; i++){
+          //   if (tags[i]["confidence"] > 0.7){
+          //     String foodName = tags[i]["name"];
+          //     Widget foodCard = FoodCard(foodName);
+          //     foods.add(foodCard);
+          //   }
+          // }
+          print(tags);
+
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -96,3 +108,36 @@ class DisplayPictureScreen extends StatelessWidget {
     );
   }
 }
+
+// class PictureFoodScreen extends StatelessWidget {
+//   final List<Widget> ;
+
+//   const PictureFoodScreen({Key key, this.imagePath}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text('Display the Picture')),
+//       // The image is stored as a file on the device. Use the `Image.file`
+//       // constructor with the given path to display the image.
+//       body: Image.file(File(imagePath)),
+//     );
+//   }
+// }
+
+// class FoodCard extends StatelessWidget {
+//   final String photoTag;
+
+//   const FoodCard(this.photoTag);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       child: ListTile(
+//         title: Text(photoTag),
+//         onTap: () {
+//         },
+//       ),
+//     );
+//   }
+// }

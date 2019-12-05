@@ -25,7 +25,7 @@ class Home extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Center(
-                child: Text("sugr"),
+                child: Image.asset('assets/images/logo.png'),
               ),
             ),
             Center(

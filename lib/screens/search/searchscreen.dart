@@ -24,13 +24,13 @@ class _SearchWidgetState extends State<SearchWidget> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Search'),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-          ],
+          // actions: <Widget>[
+          //   IconButton(
+          //       icon: Icon(Icons.arrow_back_ios),
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //       }),
+          // ],
         ),
         body: Container(
           child: Column(

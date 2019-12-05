@@ -21,14 +21,14 @@ class _UserInputState extends State<UserInput> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Search'),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-          ],
+          title: Text('Ratio Input'),
+          // actions: <Widget>[
+          //   IconButton(
+          //       icon: Icon(Icons.arrow_back_ios),
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //       }),
+          // ],
         ),
         body: Container(
           child: Column(
@@ -40,7 +40,7 @@ class _UserInputState extends State<UserInput> {
                 ),
               ),
               Expanded(
-                child: _foods,
+                child: Text("Input carbs per unit of insulin above."),
               ),
             ],
           ),
@@ -53,8 +53,9 @@ class _UserInputState extends State<UserInput> {
               var text = searchController.text;
               Provider.of<UserInfo>(context, listen: false)
                   .setRatio(int.parse(text));
+              Navigator.pop(context);
             },
-            child: Icon(Icons.search),
+            child: Icon(Icons.add),
           );
         }));
   }
