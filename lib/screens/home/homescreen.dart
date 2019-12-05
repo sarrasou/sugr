@@ -143,36 +143,32 @@ class ActionButton extends StatelessWidget {
                   await barcodeValueResponse(barcodeValue);
               String servingUnit = barcodeNutritionResponse[0]["serving_unit"];
               String servingQuantity =
-                  barcodeNutritionResponse[0]["serving_qty"];
+                  barcodeNutritionResponse[0]["serving_qty"].toString();
               String carbs =
-                  barcodeNutritionResponse[0]["nf_total_carbohydrate"];
-              print("something");
+                  barcodeNutritionResponse[0]["nf_total_carbohydrate"].toString();
               // nutrition info
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  print("something");
-                  return AlertDialog(title: Text("something"),
+                  return AlertDialog(
+                    title: Text(barcodeNutritionResponse[0]["food_name"]),
+                    content: Column(
+                      children: <Widget>[
+                        Text("Serving Unit: " + servingUnit),
+                        Text("Serving Quantity: " + servingQuantity),
+                        Text("Carbs: " + carbs),
+                        Text("Insulin:" +
+                            Provider.of<UserInfo>(context, listen: false)
+                                .calculateInsulin(double.parse(carbs))
+                                .toString()),
+                        Text("Current ratio:" +
+                            "1/" +
+                            Provider.of<UserInfo>(context, listen: false)
+                                .getRatio()
+                                .toString())
+                      ],
+                    ),
                   );
-                  // AlertDialog(
-                  //   title: Text(barcodeNutritionResponse[0]["food_name"]),
-                  //   content: Column(
-                  //     children: <Widget>[
-                  //       Text("Serving Unit: " + servingUnit),
-                  //       Text("Serving Quantity: " + servingQuantity),
-                  //       Text("Carbs: " + carbs),
-                  //       Text("Insulin:" +
-                  //           Provider.of<UserInfo>(context, listen: false)
-                  //               .calculateInsulin(double.parse(carbs))
-                  //               .toString()),
-                  //       Text("Current ratio:" +
-                  //           "1/" +
-                  //           Provider.of<UserInfo>(context, listen: false)
-                  //               .getRatio()
-                  //               .toString())
-                  //     ],
-                  //   ),
-                  // );
                 },
               );
             } else {
@@ -198,8 +194,14 @@ class ActionButton extends StatelessWidget {
 
     var response = await http.get(url, headers: headers);
 
+    dynamic barcodeNutritionInfo = jsonDecode(response.body)["foods"];
     print(jsonDecode(response.body)["foods"]);
-    return jsonDecode(response.body)["foods"];
+
+    print(barcodeNutritionInfo[0]["serving_unit"]);
+    print(barcodeNutritionInfo[0]["serving_qty"]);
+    print(barcodeNutritionInfo[0]["nf_total_carbohydrate"]);
+
+    return barcodeNutritionInfo;
   }
 
   Widget _buildDialog(BuildContext context) {
