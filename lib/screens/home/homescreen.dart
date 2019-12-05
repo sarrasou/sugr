@@ -2,6 +2,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:sugr/main.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -134,8 +137,44 @@ class ActionButton extends StatelessWidget {
             if (popupDesc == "search") {
               Navigator.pushNamed(context, '/search');
             } else if (popupDesc == "scan") {
-              print(await FlutterBarcodeScanner.scanBarcode(
+              String barcodeValue = (await FlutterBarcodeScanner.scanBarcode(
                   "#FF0000", "Cancel", false, ScanMode.BARCODE));
+              dynamic barcodeNutritionResponse =
+                  await barcodeValueResponse(barcodeValue);
+              String servingUnit = barcodeNutritionResponse[0]["serving_unit"];
+              String servingQuantity =
+                  barcodeNutritionResponse[0]["serving_qty"];
+              String carbs =
+                  barcodeNutritionResponse[0]["nf_total_carbohydrate"];
+              print("something");
+              // nutrition info
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  print("something");
+                  return AlertDialog(title: Text("something"),
+                  );
+                  // AlertDialog(
+                  //   title: Text(barcodeNutritionResponse[0]["food_name"]),
+                  //   content: Column(
+                  //     children: <Widget>[
+                  //       Text("Serving Unit: " + servingUnit),
+                  //       Text("Serving Quantity: " + servingQuantity),
+                  //       Text("Carbs: " + carbs),
+                  //       Text("Insulin:" +
+                  //           Provider.of<UserInfo>(context, listen: false)
+                  //               .calculateInsulin(double.parse(carbs))
+                  //               .toString()),
+                  //       Text("Current ratio:" +
+                  //           "1/" +
+                  //           Provider.of<UserInfo>(context, listen: false)
+                  //               .getRatio()
+                  //               .toString())
+                  //     ],
+                  //   ),
+                  // );
+                },
+              );
             } else {
               showDialog(
                 context: context,
@@ -147,6 +186,20 @@ class ActionButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  dynamic barcodeValueResponse(String barcodeValue) async {
+    var url =
+        "https://trackapi.nutritionix.com/v2/search/item?upc=" + barcodeValue;
+    var headers = {
+      "x-app-id": "314dccf6",
+      "x-app-key": "3ff9cb2d68cd00e7779deb4fa93fea07"
+    };
+
+    var response = await http.get(url, headers: headers);
+
+    print(jsonDecode(response.body)["foods"]);
+    return jsonDecode(response.body)["foods"];
   }
 
   Widget _buildDialog(BuildContext context) {

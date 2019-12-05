@@ -26,14 +26,15 @@ Future<void> main() async {
 }
 
 class UserInfo with ChangeNotifier {
-  int ratio;
+  // default insulin ratio is usually 10
+  int ratio = 10;
 
   double calculateInsulin(double carbs) {
     double insulin = carbs / ratio;
     return insulin;
   }
 
-  int getRatio(){
+  int getRatio() {
     return ratio;
   }
 

@@ -129,8 +129,11 @@ class FoodCard extends StatelessWidget {
                             .calculateInsulin(
                                 double.parse(this.foodInfo["carbs"]))
                             .toString()),
-                    Text("Current ratio:" + "1/" + Provider.of<UserInfo>(context, listen: false)
-                            .getRatio().toString())
+                    Text("Current ratio:" +
+                        "1/" +
+                        Provider.of<UserInfo>(context, listen: false)
+                            .getRatio()
+                            .toString())
                   ],
                 ),
               );
