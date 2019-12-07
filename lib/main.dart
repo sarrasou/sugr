@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:sugr/screens/search/searchscreen.dart';
-import 'package:sugr/screens/home/homescreen.dart';
+import 'package:sugr/screens/search_screen/search_screen.dart';
+import 'package:sugr/screens/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:sugr/screens/userInput/inputscreen.dart';
-import 'package:sugr/screens/camscreen/camscreen.dart';
+import 'package:sugr/screens/user_input_screen/user_input_screen.dart';
+import 'package:sugr/screens/cam_screen/cam_screen.dart';
 
 List<CameraDescription> cameras;
 
