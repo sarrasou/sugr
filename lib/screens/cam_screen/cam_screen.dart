@@ -70,21 +70,21 @@ class _CamWidgetState extends State<CamWidget> {
           var response = await http.post(url, headers: headers, body: picture);
 
           List<dynamic> tags = jsonDecode(response.body)["tags"];
-          // var foods = List<Widget>();
+          var foods = List<Widget>();
 
-          // for(int i=0; i < tags.length; i++){
-          //   if (tags[i]["confidence"] > 0.7){
-          //     String foodName = tags[i]["name"];
-          //     Widget foodCard = FoodCard(foodName);
-          //     foods.add(foodCard);
-          //   }
-          // }
+          for (int i = 0; i < tags.length; i++) {
+            if (tags[i]["confidence"] > 0.7) {
+              String foodName = tags[i]["name"];
+              Widget foodCard = FoodCard(foodName);
+              foods.add(foodCard);
+            }
+          }
           print(tags);
 
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DisplayPictureScreen(imagePath: path),
+              builder: (context) => PictureFoodScreen(foods),
             ),
           );
         },
@@ -109,35 +109,36 @@ class DisplayPictureScreen extends StatelessWidget {
   }
 }
 
-// class PictureFoodScreen extends StatelessWidget {
-//   final List<Widget> ;
+class PictureFoodScreen extends StatelessWidget {
+  final List<Widget> tagsListView;
 
-//   const PictureFoodScreen({Key key, this.imagePath}) : super(key: key);
+  PictureFoodScreen(this.tagsListView);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Display the Picture')),
-//       // The image is stored as a file on the device. Use the `Image.file`
-//       // constructor with the given path to display the image.
-//       body: Image.file(File(imagePath)),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Display the Picture')),
+      // The image is stored as a file on the device. Use the `Image.file`
+      // constructor with the given path to display the image.
+      body: Container(
+        child: ListView(children: tagsListView),
+      ),
+    );
+  }
+}
 
-// class FoodCard extends StatelessWidget {
-//   final String photoTag;
+class FoodCard extends StatelessWidget {
+  final String photoTag;
 
-//   const FoodCard(this.photoTag);
+  const FoodCard(this.photoTag);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       child: ListTile(
-//         title: Text(photoTag),
-//         onTap: () {
-//         },
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(photoTag),
+        onTap: () {},
+      ),
+    );
+  }
+}
