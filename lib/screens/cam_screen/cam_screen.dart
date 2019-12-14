@@ -59,9 +59,9 @@ class _CamWidgetState extends State<CamWidget> {
           await controller.takePicture(path);
 
           String url =
-              "https://eastus.api.cognitive.microsoft.com/vision/v2.1/analyze?visualFeatures=Tags&language=en";
+              "https://sugr-app.cognitiveservices.azure.com/vision/v2.1/analyze?visualFeatures=Tags&language=en";
           var headers = {
-            "Ocp-Apim-Subscription-Key": "1c41559437aa49af831d9d70a8ce8c10",
+            "Ocp-Apim-Subscription-Key": "9348d76b059e485f8fabe079b46485a4",
             "Content-Type": "application/octet-stream",
           };
 
